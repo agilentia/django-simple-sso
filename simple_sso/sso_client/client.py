@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
 from django.contrib.auth import login
-from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.views.generic import View
 from itsdangerous import URLSafeTimedSerializer
@@ -16,6 +15,8 @@ from ..compat import (
     urljoin,
     urlencode,
 )
+
+User = get_user_model()
 
 
 class LoginView(View):
@@ -66,7 +67,9 @@ class AuthenticateView(LoginView):
 class Client(object):
     login_view = LoginView
     authenticate_view = AuthenticateView
-    backend = "%s.%s" % (ModelBackend.__module__, ModelBackend.__name__)
+    # backend = "%s.%s" % (ModelBackend.__module__, ModelBackend.__name__)
+    # backend = "%s.%s" % (User.__module__, User.__name__) ?
+    backend = 'django.contrib.auth.backends.ModelBackend'
     user_extra_data = None
 
     def __init__(self, server_url, public_key, private_key,
