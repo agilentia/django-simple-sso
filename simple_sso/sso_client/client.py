@@ -16,8 +16,6 @@ from ..compat import (
     urlencode,
 )
 
-User = get_user_model()
-
 
 class LoginView(View):
     client = None
@@ -115,6 +113,8 @@ class Client(object):
         return user
 
     def build_user(self, user_data):
+        User = get_user_model()
+
         try:
             user = User.objects.get(username=user_data['username'])
         except User.DoesNotExist:
